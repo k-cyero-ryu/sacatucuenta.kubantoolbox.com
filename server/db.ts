@@ -1,12 +1,12 @@
-import { Pool as PgPool, neonConfig } from '@neondatabase/serverless';
-import { drizzle as drizzlePg } from 'drizzle-orm/neon-serverless';
+import 'dotenv/config';
+import { Pool as PgPool } from 'pg';
+import { drizzle as drizzlePg } from 'drizzle-orm/node-postgres';
 import { drizzle as drizzleMysql } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 import ws from "ws";
 import * as schema from "@shared/schema";
 import { loadDbConfig } from './config';
 
-neonConfig.webSocketConstructor = ws;
 
 const config = loadDbConfig();
 
@@ -42,7 +42,7 @@ function createMysqlConnection(): MySQLDB {
     keepAliveInitialDelay: 0
   });
 
-  return drizzleMysql(pool, { 
+  return drizzleMysql(pool, {
     schema,
     mode: 'default'
   });
@@ -82,7 +82,7 @@ async function createDbConnection(): Promise<Database> {
         lastError = error as Error;
         retries--;
         if (retries > 0) {
-          console.log(`Connection attempt failed, retrying... (${retries} attempts remaining)`);
+          console.log(`Connection attempt failed, retrying... (${retries} attempts remaining`);
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
@@ -120,4 +120,5 @@ export function isMysql(db: Database): db is MySQLDB {
 
 // SQL template literal tag
 import { sql } from 'drizzle-orm';
+import { Donut } from 'lucide-react';
 export { sql };
